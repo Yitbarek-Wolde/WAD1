@@ -44,34 +44,39 @@ const defaultList: any = [
   },
 ]
 // current logged in user info
-const user = {
-  // userid
-  uid: '30009257',
-  // profile
-  // avatar,
-  // username
-  uname: 'John',
-}
+// const user = {
+//   // userid
+//   uid: '30009257',
+//   // profile
+//   // avatar,
+//   // username
+//   uname: 'John',
+// }
 
-//const {username, password, age} = person;
+// //const {username, password, age} = person;
 
-//
-// Nav Tab
-const tabs = [
-  { type: 'hot', text: 'Top' },
-  { type: 'newest', text: 'Newest' },
-] 
+// //
+// // Nav Tab
+// const tabs = [
+//   { type: 'hot', text: 'Top' },
+//   { type: 'newest', text: 'Newest' },
+// ] 
 const App = () => {
-  //const [person, setPerson] = useState(defaultList)
-  let [count, setCount] = useState<number>(defaultList.length -1);
+  const [person, setPerson] = useState(defaultList)
+ let [count, setCount] = useState<number>(person.length);
 
   const textRef = useRef<HTMLTextAreaElement | null>(null);
+  const deleteRef = useRef<HTMLSpanElement | null>(null);
 
   const userPost = (e: MouseEvent<HTMLDivElement>) => { 
     setCount(++count)
-   // setPerson({content:textRef.current!.value, user: {uname: ''}} );
-    defaultList.push({content:textRef.current!.value, user: {uname: 'Yitbarek'}})
-    console.log('this, ', defaultList)
+    person.push({rpid: count, content:textRef.current!.value, user: {uname: 'Yitbarek'}})
+    setPerson(person);
+  }
+  const deleteComment = (comment: any) =>{
+   
+   setPerson(person.filter((item: any) => item.rpid !== comment))
+   console.log('del clicked')
   }
   return (
 
@@ -109,16 +114,16 @@ const App = () => {
               ref={textRef}
             />
             {/* post button */}
-            <div className="reply-box-send">
-              <div className="send-text" onClick={userPost}>post</div>
+            <div className="reply-box-send" onClick={userPost}>
+              <div className="send-text" >post</div>
             </div>
           </div>
         </div>
         {/* comment list */}
         <div>
-          {defaultList.map((i: any, index: number) => {
+          {person.map((i: any, index: number) => {
             return (
-              <div className="reply-list">
+              <div className="reply-list" key={index}>
                 {/* comment item */}
                 <div className="reply-item">
                   {/* profile */}
@@ -143,8 +148,9 @@ const App = () => {
                         <span className="reply-time">{'2023-11-11'}</span>
                         {/* total likes */}
                         <span className="reply-time">Like:{100}</span>
-                        <span className="delete-btn">
+                        <span className="delete-btn"  ref={deleteRef} onClick={()=> deleteComment(i.rpid)} >
                           Delete
+                          
                         </span>
                       </div>
                     </div>
