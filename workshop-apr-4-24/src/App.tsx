@@ -70,7 +70,7 @@ const App = () => {
 
   const userPost = (e: MouseEvent<HTMLDivElement>) => { 
     setCount(++count)
-    person.push({rpid: count, content:textRef.current!.value, user: {uname: 'Yitbarek'}})
+    person.push({rpid: count, content:textRef.current!.value, user: {uname: 'Yitbarek'}, like: count*10})
     setPerson(person);
   }
   const deleteComment = (comment: any) =>{
@@ -147,7 +147,7 @@ const App = () => {
                         {/* comment created time */}
                         <span className="reply-time">{'2023-11-11'}</span>
                         {/* total likes */}
-                        <span className="reply-time">Like:{100}</span>
+                        <span className="reply-time">Like:{i.like}</span>
                         <span className="delete-btn"  ref={deleteRef} onClick={()=> deleteComment(i.rpid)} >
                           Delete
                           
