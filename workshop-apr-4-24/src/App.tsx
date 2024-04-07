@@ -112,6 +112,8 @@ const App = () => {
     else {
       return alert('Nothing to post!')
     }
+    textRef.current!.value = '';
+    textRef.current!.focus();
   }
   const deleteComment = (rpid: number | string) => {
     setCommentList(commentList.filter((item: datatypes) => item.rpid !== rpid))
