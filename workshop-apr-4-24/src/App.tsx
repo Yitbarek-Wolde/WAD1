@@ -78,6 +78,8 @@ const tabs = [
   { type: 'newest', text: 'Newest' },
 ]
 const App = () => {
+
+
   const [commentList, setCommentList] = useState<datatypes[]>(_.orderBy(defaultList, 'like', 'desc'));
   let [count, setCount] = useState<number>(commentList.length);
   const [activeType, setActiveType] = useState('hot');
@@ -150,7 +152,7 @@ const App = () => {
           {/* current logged in user profile */}
           <div className="reply-box-avatar">
             <div className="bili-avatar">
-              <img className="bili-avatar-img" src='{}' alt="Profile" />
+              <img className="bili-avatar-img" src={avatar} alt="Profile" />
             </div>
           </div>
           <div className="reply-box-wrap">
