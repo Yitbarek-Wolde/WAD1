@@ -1,7 +1,23 @@
 import { MouseEvent, useRef, useState } from 'react';
-import './App.scss'
-//import avatar from './images/bozai.png'
+import './App.scss';
+import classNames from 'classnames';
+import avatar from './images/bozai.png'
+import _ from 'lodash'
+// import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'
+import dayjs from 'dayjs';
 
+type datatypes = {
+  rpid: number | string;
+  user: {
+    uid: string,
+    avatar: string,
+    uname: string
+  };
+  content: string | undefined;
+  ctime: string;
+  like: number;
+}
 
 // Comment List data
 const defaultList: any = [
@@ -35,7 +51,7 @@ const defaultList: any = [
     rpid: 1,
     user: {
       uid: '30009257',
-      // avatar,
+      avatar,
       uname: 'John',
     },
     content: 'I told my computer I needed a break... now it will not stop sending me vacation ads.',
@@ -44,39 +60,61 @@ const defaultList: any = [
   },
 ]
 // current logged in user info
-// const user = {
-//   // userid
-//   uid: '30009257',
-//   // profile
-//   // avatar,
-//   // username
-//   uname: 'John',
-// }
+const user = {
+  // userid
+
+  uid: '3000929857',
+  avatar,
+  uname: 'Yitbarek',
+
+}
 
 // //const {username, password, age} = person;
 
 // //
 // // Nav Tab
-// const tabs = [
-//   { type: 'hot', text: 'Top' },
-//   { type: 'newest', text: 'Newest' },
-// ] 
+const tabs = [
+  { type: 'hot', text: 'Top' },
+  { type: 'newest', text: 'Newest' },
+]
 const App = () => {
-  const [person, setPerson] = useState(defaultList)
- let [count, setCount] = useState<number>(person.length);
+  const [commentList, setCommentList] = useState<datatypes[]>(_.orderBy(defaultList, 'like', 'desc'));
+  let [count, setCount] = useState<number>(commentList.length);
+  const [activeType, setActiveType] = useState('hot');
 
   const textRef = useRef<HTMLTextAreaElement | null>(null);
   const deleteRef = useRef<HTMLSpanElement | null>(null);
 
-  const userPost = (e: MouseEvent<HTMLDivElement>) => { 
-    setCount(++count)
-    person.push({rpid: count, content:textRef.current!.value, user: {uname: 'Yitbarek'}, like: count*10})
-    setPerson(person);
+  const changeActiveType = (type: string) => {
+
+    setActiveType(type);
+    if (type === 'hot') {
+      setCommentList(_.orderBy(commentList, 'like', 'desc'));
+    } else {
+      setCommentList(_.orderBy(commentList, 'ctime', 'desc'));
+    }
   }
-  const deleteComment = (comment: any) =>{
-   
-   setPerson(person.filter((item: any) => item.rpid !== comment))
-   console.log('del clicked')
+
+  const userPost = () => {
+    setCount(++count)
+    let newComment = {
+      rpid: uuidv4(),
+      user,
+      content: textRef.current?.value,
+      ctime: dayjs(Date.now()).format('MM-DD HH:mm'),
+      like: 0
+    }
+    // commentList.push({ ...user, content: textRef.current!.value, ctime: dayjs(Date.now()).format('MM-DD HH:mm') })
+    if (newComment.content !== '') {
+      setCommentList([...commentList, newComment]);
+      console.log(typeof(newComment.content), "here")
+    }
+    else {
+      return alert('Nothing to post!')
+    }
+  }
+  const deleteComment = (rpid: number | string) => {
+    setCommentList(commentList.filter((item: datatypes) => item.rpid !== rpid))
   }
   return (
 
@@ -91,8 +129,15 @@ const App = () => {
           </li>
           <li className="nav-sort">
             {/* highlight class name： active */}
-            <span className='nav-item'>Top</span>
-            <span className='nav-item'>Newest</span>
+            {
+              tabs.map(tab => (
+                <span key={tab.type}
+                  className={classNames('nav-item', { active: tab.type === activeType })}
+                  onClick={() => changeActiveType(tab.type)}>
+                  {tab.text}
+                </span>)
+              )
+            }
           </li>
         </ul>
       </div>
@@ -121,7 +166,7 @@ const App = () => {
         </div>
         {/* comment list */}
         <div>
-          {person.map((i: any, index: number) => {
+          {commentList.map((i: datatypes, index: number) => {
             return (
               <div className="reply-list" key={index}>
                 {/* comment item */}
@@ -145,13 +190,16 @@ const App = () => {
                       <span className="reply-content">{i.content}</span>
                       <div className="reply-info">
                         {/* comment created time */}
-                        <span className="reply-time">{'2023-11-11'}</span>
+                        <span className="reply-time">{i.ctime}</span>
                         {/* total likes */}
                         <span className="reply-time">Like:{i.like}</span>
-                        <span className="delete-btn"  ref={deleteRef} onClick={()=> deleteComment(i.rpid)} >
-                          Delete
-                          
-                        </span>
+
+                        {
+                          i.user.uid === user.uid && (
+                            <span className="delete-btn" ref={deleteRef} onClick={() => deleteComment(i.rpid)} >
+                              Delete
+
+                            </span>)}
                       </div>
                     </div>
                   </div>
