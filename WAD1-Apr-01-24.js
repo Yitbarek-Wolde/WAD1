@@ -17,10 +17,10 @@ const getNewArray = function (arr) {
     return arr.filter(word => word.length >= 5 && word.includes('a'))
 }
 
-const concat = (...arr) => {
-    return arr.reduce((acc, cur) => {(typeof(cur) == 'object' ? acc.push(...cur) : acc.push(...cur.split('')))
-    return acc}, [])
-
+const concat = (arg1, arg2, arg3) => { // (...arr) => { // old solution
+    return [...arg1, ...arg2, ...arg3] // new solution
+    // return arr.reduce((acc, cur) => {(typeof(cur) == 'object' ? acc.push(...cur) : acc.push(...cur.split('')))
+    // return acc}, []) // old solution
 }
 
 let arrOfsum = [22, 10, 30, 5]
@@ -31,4 +31,4 @@ console.log(sum(arrOfsum))
 console.log('##########################')
 console.log(getNewArray(arrOfwords))
 console.log('##########################')
-console.log(concat('hi', [1,2,3], ['Hello','world']))
+console.log(concat('hi', [1, 2, 3], ['Hello', 'world']))
