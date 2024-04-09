@@ -123,7 +123,7 @@ function Reply(props: propType) {
                 <span className="reply-time">Like:{like}</span>
 
                 {
-                  props.userIN.uid === user.uid && (
+                  userIN.uid === user.uid && (
                     <span className="delete-btn" onClick={() => deleteComment(rpid)} >
                       Delete
 
