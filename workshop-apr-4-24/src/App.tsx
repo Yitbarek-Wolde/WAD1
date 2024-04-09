@@ -124,7 +124,7 @@ function Reply(props: propType) {
 
                 {
                   props.userIN.uid === user.uid && (
-                    <span className="delete-btn" onClick={() => deleteComment(user.uid)} >
+                    <span className="delete-btn" onClick={() => deleteComment(rpid)} >
                       Delete
 
                     </span>)}
