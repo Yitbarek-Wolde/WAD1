@@ -62,8 +62,8 @@ const defaultList: any = [
 // current logged in user info
 const user = {
   // userid
-
-  uid: '3000929857',
+  rpid: '',
+  uid: '3030092349857',
   avatar,
   uname: 'Yitbarek',
 
@@ -77,6 +77,64 @@ const tabs = [
   { type: 'hot', text: 'Top' },
   { type: 'newest', text: 'Newest' },
 ]
+
+type propType = {
+  rpid: number | string;
+  userIN: {
+    uid: string;
+    avatar: string;
+    uname: string;
+  };
+  content: string;
+  ctime: string;
+  like: number;
+  deleteComment: (rpid: number | string) => void;
+}
+
+function Reply(props: propType) {
+
+  const {  rpid, userIN, content, ctime, like, deleteComment } = props;
+  return (
+    <div>
+      <div className="reply-list" >
+        {/* comment item */}
+        <div className="reply-item">
+          {/* profile */}
+          <div className="root-reply-avatar">
+            <div className="bili-avatar">
+              <img
+                className="bili-avatar-img"
+                alt=""
+              />
+            </div>
+          </div>
+          <div className="content-wrap">
+            {/* username */}
+            <div className="user-info">
+              <div className="user-name">{user.uname}</div>
+            </div>
+            {/* comment content */}
+            <div className="root-reply">
+              <span className="reply-content">{content}</span>
+              <div className="reply-info">
+                {/* comment created time */}
+                <span className="reply-time">{ctime}</span>
+                {/* total likes */}
+                <span className="reply-time">Like:{like}</span>
+
+                {
+                  props.userIN.uid === user.uid && (
+                    <span className="delete-btn" onClick={() => deleteComment(user.uid)} >
+                      Delete
+
+                    </span>)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>)
+}
 const App = () => {
 
 
@@ -85,7 +143,7 @@ const App = () => {
   const [activeType, setActiveType] = useState('hot');
 
   const textRef = useRef<HTMLTextAreaElement | null>(null);
-  const deleteRef = useRef<HTMLSpanElement | null>(null);
+  //const deleteRef = useRef<HTMLSpanElement | null>(null);
 
   const changeActiveType = (type: string) => {
 
@@ -104,12 +162,12 @@ const App = () => {
       user,
       content: textRef.current?.value,
       ctime: dayjs(Date.now()).format('MM-DD HH:mm'),
-      like: 0
+      like: 20
     }
-    // commentList.push({ ...user, content: textRef.current!.value, ctime: dayjs(Date.now()).format('MM-DD HH:mm') })
+
     if (newComment.content !== '') {
       setCommentList([...commentList, newComment]);
-      console.log(typeof(newComment.content), "here")
+      console.log(typeof (newComment.content), "here")
     }
     else {
       return alert('Nothing to post!')
@@ -169,49 +227,18 @@ const App = () => {
           </div>
         </div>
         {/* comment list */}
-        <div>
-          {commentList.map((i: datatypes, index: number) => {
-            return (
-              <div className="reply-list" key={index}>
-                {/* comment item */}
-                <div className="reply-item">
-                  {/* profile */}
-                  <div className="root-reply-avatar">
-                    <div className="bili-avatar">
-                      <img
-                        className="bili-avatar-img"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="content-wrap">
-                    {/* username */}
-                    <div className="user-info">
-                      <div className="user-name">{i.user.uname}</div>
-                    </div>
-                    {/* comment content */}
-                    <div className="root-reply">
-                      <span className="reply-content">{i.content}</span>
-                      <div className="reply-info">
-                        {/* comment created time */}
-                        <span className="reply-time">{i.ctime}</span>
-                        {/* total likes */}
-                        <span className="reply-time">Like:{i.like}</span>
+        {commentList.map((i: any) => (
+          <Reply
+            key={i.rpid}
+            rpid={i.rpid}
+            userIN={i.user}
+            content={i.content}
+            ctime={i.ctime}
+            like={i.like}
+            deleteComment={deleteComment}
+          />
+        ))}
 
-                        {
-                          i.user.uid === user.uid && (
-                            <span className="delete-btn" ref={deleteRef} onClick={() => deleteComment(i.rpid)} >
-                              Delete
-
-                            </span>)}
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
-              </div>)
-          })}</div>
       </div>
     </div>
   )
