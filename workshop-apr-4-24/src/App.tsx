@@ -227,16 +227,7 @@ const App = () => {
           </div>
         </div>
         {/* comment list */}
-        {commentList.map((i: datatypes) => (
-          <Reply
-            key={i.rpid}
-            rpid={i.rpid}
-            userIN={i.user}
-            content={i.content}
-            ctime={i.ctime}
-            like={i.like}
-            deleteComment={deleteComment}
-          />
+        {commentList.map((i: datatypes) => (<Reply {...i} userIN={i.user} deleteComment={deleteComment}/>
         ))}
 
       </div>
