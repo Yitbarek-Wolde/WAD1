@@ -85,7 +85,7 @@ type propType = {
     avatar: string;
     uname: string;
   };
-  content: string;
+  content: string | undefined;
   ctime: string;
   like: number;
   deleteComment: (rpid: number | string) => void;
@@ -227,7 +227,7 @@ const App = () => {
           </div>
         </div>
         {/* comment list */}
-        {commentList.map((i: any) => (
+        {commentList.map((i: datatypes) => (
           <Reply
             key={i.rpid}
             rpid={i.rpid}
