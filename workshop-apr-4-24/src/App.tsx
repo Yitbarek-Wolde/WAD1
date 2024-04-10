@@ -1,4 +1,4 @@
-import { MouseEvent, useRef, useState } from 'react';
+import react, { useRef, useState, useEffect } from 'react';
 import './App.scss';
 import classNames from 'classnames';
 import avatar from './images/bozai.png'
@@ -19,49 +19,51 @@ type datatypes = {
   like: number;
 }
 
+
+
 // Comment List data
-const defaultList: any = [
-  {
-    // comment id
-    rpid: 3,
-    // user info
-    user: {
-      uid: '13258165',
-      avatar: '',
-      uname: 'Jay Zhou',
-    },
-    // comment content
-    content: 'Nice, well done',
-    // created datetime
-    ctime: '10-18 08:15',
-    like: 88,
-  },
-  {
-    rpid: 2,
-    user: {
-      uid: '36080105',
-      avatar: '',
-      uname: 'Song Xu',
-    },
-    content: 'I search for you thousands of times, from dawn till dusk.',
-    ctime: '11-13 11:29',
-    like: 88,
-  },
-  {
-    rpid: 1,
-    user: {
-      uid: '30009257',
-      avatar,
-      uname: 'John',
-    },
-    content: 'I told my computer I needed a break... now it will not stop sending me vacation ads.',
-    ctime: '10-19 09:00',
-    like: 66,
-  },
-]
+// const defaultList: any = [
+//   {
+//     // comment id
+//     rpid: 3,
+//     // user info
+//     user: {
+//       uid: '13258165',
+//       avatar: '',
+//       uname: 'Jay Zhou',
+//     },
+//     // comment content
+//     content: 'Nice, well done',
+//     // created datetime
+//     ctime: '10-18 08:15',
+//     like: 88,
+//   },
+//   {
+//     rpid: 2,
+//     user: {
+//       uid: '36080105',
+//       avatar: '',
+//       uname: 'Song Xu',
+//     },
+//     content: 'I search for you thousands of times, from dawn till dusk.',
+//     ctime: '11-13 11:29',
+//     like: 88,
+//   },
+//   {
+//     rpid: 1,
+//     user: {
+//       uid: '30009257',
+//       avatar,
+//       uname: 'John',
+//     },
+//     content: 'I told my computer I needed a break... now it will not stop sending me vacation ads.',
+//     ctime: '10-19 09:00',
+//     like: 66,
+//   },
+// ]
 // current logged in user info
+
 const user = {
-  // userid
   rpid: '',
   uid: '3030092349857',
   avatar,
@@ -69,10 +71,6 @@ const user = {
 
 }
 
-// //const {username, password, age} = person;
-
-// //
-// // Nav Tab
 const tabs = [
   { type: 'hot', text: 'Top' },
   { type: 'newest', text: 'Newest' },
@@ -111,7 +109,7 @@ function Reply(props: propType) {
           <div className="content-wrap">
             {/* username */}
             <div className="user-info">
-              <div className="user-name">{user.uname}</div>
+              <div className="user-name">{userIN.uname}</div>
             </div>
             {/* comment content */}
             <div className="root-reply">
@@ -137,13 +135,24 @@ function Reply(props: propType) {
 }
 const App = () => {
 
+ 
 
-  const [commentList, setCommentList] = useState<datatypes[]>(_.orderBy(defaultList, 'like', 'desc'));
+  const [commentList, setCommentList] = useState<datatypes[]>(_.orderBy([], 'like', 'desc'));
   let [count, setCount] = useState<number>(commentList.length);
   const [activeType, setActiveType] = useState('hot');
 
   const textRef = useRef<HTMLTextAreaElement | null>(null);
-  //const deleteRef = useRef<HTMLSpanElement | null>(null);
+
+   useEffect(() => {
+    const getList = async () => {
+      console.log('getList.....');
+      const response = await fetch('https://yitbarek-wolde.github.io/SD405/data.json');
+      const result = await response.json();
+      setCommentList(result.data.userlist);
+      console.log(result.data)
+    }
+    getList();
+  }, []);
 
   const changeActiveType = (type: string) => {
 
@@ -227,8 +236,8 @@ const App = () => {
           </div>
         </div>
         {/* comment list */}
-        {commentList.map((i: datatypes) => (<Reply {...i} userIN={i.user} deleteComment={deleteComment}/>
-        ))}
+     
+        {commentList.map((i: datatypes) => (<Reply key={i.rpid} {...i} userIN={i.user}  deleteComment={deleteComment}/>))}
 
       </div>
     </div>
