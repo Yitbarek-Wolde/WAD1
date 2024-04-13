@@ -1,11 +1,22 @@
 import Item from "../Item"
-import { Todo } from "../../types/propTypes"
+import Todo from "../../types"
+
 import './index.css'
 
-export default function List(prop: {todos: Todo[]}) {
+type Props = {
+  todos: Todo[],
+  onUpdateTodo: (id: string) => void;
+  onDeleteTodoById: (id: string) => void;
+}
+
+export default function List(props: Props) {
+  const { todos, onUpdateTodo, onDeleteTodoById } = props;
   return (
     <ul className="todo-main">
-      {prop.todos?.map(todo => <Item key={todo.id} {...todo} /> )}
+      {todos.map(todo => <Item key={todo.id} 
+                                {...todo} 
+                                onUpdateTodo={onUpdateTodo}
+                                onDeleteTodoById={onDeleteTodoById}/>)}
     </ul>
   )
 }
