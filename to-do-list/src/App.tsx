@@ -11,6 +11,14 @@ import { useEffect, useState } from 'react';
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
 
+  const updateAll = (value: boolean) => {
+    setTodos(todos.map(todo => ({...todo, done: value})))
+  }
+
+  const deleteFinishedTodos = () => {
+    setTodos(todos.filter(todo => !todo.done));
+  }
+
   const addNewTodo = (newTodo: Todo) => {
     setTodos([...todos, newTodo]);
   }
@@ -38,7 +46,7 @@ function App() {
       <div className="todo-wrap">
         <Header onAddNewTodo={addNewTodo}/>
         <List todos={todos} onUpdateTodo={updateTodo} onDeleteTodoById={deleteTodoById}/>
-        <Footer todos={todos}/>
+        <Footer todos={todos} onUpdateAll={updateAll} onDeleteFinishedTodos={deleteFinishedTodos}/>
       </div>
     </div>
   );
