@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const TempConvert = () => {
 
   const [cel, setCel] = useState<number>(0);
-  const [fah, setFah] = useState<number>(0);
+  const [fah, setFah] = useState<number>(32);
 
   const tocel = (fValue: number): number => {
     return ((fValue - 32) * 5) / 9;
