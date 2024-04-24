@@ -26,8 +26,8 @@ export default function HeaderNav(props: any) {
     <nav className="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
       <div className="container-fluid ">
         <div>
-          <h2>Ymusic</h2>
-          <h2>Playlist</h2>
+          <a className="navbar-brand" href="#">Ymusic</a>
+          <a className="navbar-brand" href="#">Playlist</a>
         </div>
 
         <div className="d-flex" role="search">
