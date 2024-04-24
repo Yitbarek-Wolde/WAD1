@@ -1,20 +1,27 @@
-const { compare, jwtSign, hash } = require('../utils/encryption');
+const { compare, jwtSign} = require('../utils/encryption');
 const { userDB } = require('../data/data')
 
 const login = (username, password) => {
   const currentUser = userDB.find(user => user.username === username);
 
   if (!currentUser) {
-    throw new Error('Invalid username or password!');
+    return {
+      success: false,
+      messgae: 'EMAIL NOT FOUND!'
+    }
   }
 
   if (!compare(password, currentUser.password)) {
-    throw new Error('Invalid username or password!');
+    return {
+      success: false,
+      messgae: 'INCORRECT PASSWORD!'
+    }
   }
 
   const accessToken = jwtSign(currentUser);
 
   return {
+    success: true,
     id: currentUser.id,
     username: currentUser.username,
     playType: currentUser.playType,

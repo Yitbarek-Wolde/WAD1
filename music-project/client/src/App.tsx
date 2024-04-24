@@ -1,10 +1,10 @@
-
-
+import Routepage from './routes/router';
+import 'react-h5-audio-player/lib/styles.css';
 function App() {
   return (
-    <div className="App">
-      
-    </div>
+
+  <Routepage/>
+
   );
 }
 
