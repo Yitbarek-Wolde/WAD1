@@ -11,14 +11,35 @@ type PropType = {
 }
 
 export default function PlayListComponent(prop: PropType) {
-
+    
     let { playlist, setPlaylist } = prop
     let [playNow, setPlayNow] = useState('')
     const [songTitle, setSongTitle] = useState('')
+    const [ suffl, setSuffle ] = useState<any>(false)
+
+    function shuffle() {
+        setSuffle(!suffl)
+            let randNum = Math.floor(Math.random()*playlist.length)
+            setPlayNow("http://localhost:3005/" + playlist[randNum].urlPath)
+            setSongTitle(playlist[randNum].title)
+
+
+}
+
+function newshuffle() {
+    
+        let randNum = Math.floor(Math.random()*playlist.length)
+        setPlayNow("http://localhost:3005/" + playlist[randNum].urlPath)
+        setSongTitle(playlist[randNum].title)
+
+
+}
+
 
     
     function nextSong() {
-
+        if(suffl)
+            return newshuffle()
         for (let i = 0; i < playlist.length; i++) {
             console.log(playNow)
             if ("http://localhost:3005/" + playlist[i].urlPath === playNow) {
@@ -37,16 +58,11 @@ export default function PlayListComponent(prop: PropType) {
 
     }
 
-    function shuffle() {
-
-                    let randNum = Math.floor(Math.random()*playlist.length)
-                    setPlayNow("http://localhost:3005/" + playlist[randNum].urlPath)
-                    setSongTitle(playlist[randNum].title)
-        
-
-    }
+   
 
     function previousSong() {
+        if(suffl)
+            return newshuffle()
         for (let i = 0; i < playlist.length; i++) {
             if ("http://localhost:3005/" + playlist[i].urlPath === playNow) {
                 if (i - 1 !== -1) {
